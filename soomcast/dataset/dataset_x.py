@@ -62,6 +62,6 @@ def start(engine, today, before_4day):
     del df['city_x']
     del df['city_y']
     
-    print('save..')
+    print('dataset_x save..')
     df.to_sql(name='dataset_x', con=engine, if_exists = 'append', index=False, chunksize=1000000)
  

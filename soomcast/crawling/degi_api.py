@@ -80,5 +80,5 @@ def start(engine, today):
     final_df = final_df[final_df['date'] == today]
     #del final_df['PM25']
     
-    print('save..')
+    print('degi save..')
     final_df.to_sql(name='degi', con=engine, if_exists = 'append', index=False, chunksize=1000000)

@@ -128,7 +128,7 @@ def start(engine, today):
     
     #dataframe rebuild
     df = rebuild_frame(df)
-    print('save')
+    print('gisang save')
     df.to_sql(name='gisang', con=engine, if_exists = 'append', index=False, chunksize=1000000)
     driver.close()
  

@@ -52,5 +52,5 @@ def start(engine, today, model_path):
     final_df.columns = col_list
      
     final_df['date'] = today
-    print('save..')
+    print('predict save..')
     final_df.to_sql(name='pred', con=engine, if_exists = 'append', index=False, chunksize=1000000)
