@@ -17,6 +17,6 @@ engine = create_engine(db_config, echo=False)
 model_path = '../model'
 
 degi_api.start(engine, today)
-#gisang_api.start(engine, today)
+gisang_api.start(engine, today)
 dataset_x.start(engine, today, before_4day)
 predict.start(engine, today, model_path)
