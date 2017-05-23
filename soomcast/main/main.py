@@ -4,14 +4,15 @@ from datetime import timedelta, date
 from crawling import degi_api, gisang_api
 from dataset import dataset_x, predict
 #from dataset import predict2
-#today = date(2017, 5, 21)+timedelta(days=-1)
+
+#today = date(2017, 5, 19)+timedelta(days=-1)
 today = date.today()+timedelta(days=-1)
 
 # before 4days 
 before_4day = today+timedelta(days=-4)
 
 
-db_config = 'mysql+mysqlconnector://root:93115@127.0.0.1:3307/sum'
+db_config = 'mysql+pymysql://root:soomcastmysql@soomcast.vitamiin.co.kr:3306/soomcast'
 engine = create_engine(db_config, echo=False)
 
 model_path = '../model'

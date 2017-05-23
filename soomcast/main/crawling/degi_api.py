@@ -75,7 +75,7 @@ def start(engine, today):
     
     #dataset rebuild
     final_df= final_df[['date','city','SO2','CO','O3','NO2','PM10','PM25']]
-    final_df.sort(['date','city'], inplace=True)
+    final_df.sort_values(['date','city'], inplace=True)
     
     final_df = final_df[final_df['date'] == today]
     #del final_df['PM25']
