@@ -1,70 +1,142 @@
 import pandas as pd
-import os
+import numpy as np
 import h2o
 
-def turn_on():
-    # turn on H2O
-    h2o.init()
-    h2o.ls()
+import glob
+import os
+from sqlalchemy import create_engine
 
-def start(engine, today, model_path):
+
+# days 일전 x값들로 y값 예측하는 dataframe 생성
+# 예) days=5 
+# 5일후 y값 예측
+def make_pred_df(data, days):
     
-    #turn on h2o machine
-    turn_on()
+    #dataset_x
+    data_ = data.drop(['target'], axis=1)
+    data_b = data_[0:len(data_)-days]
     
+    #target_y
+    target_ = data.target
+    target_b = target_[days:len(target_)]    
+    target_b = target_b.reset_index(drop=True)
     
-    #set model path
-    os.chdir(model_path)
+    #rebuild dataframe
+    final_df = pd.concat([data_b,target_b], axis=1)    
+    final_df = h2o.H2OFrame(final_df)
     
-    # current day set
-    today = today.strftime("%Y-%m-%d")
+    final_df["target"]=final_df["target"].asfactor()    
     
-    #select dataset_x
-    dataset_x  = pd.read_sql("SELECT * FROM dataset_x where date = '"+today+"' and city='seoul';", engine)
-    
-    del dataset_x['date']
-    del dataset_x['city']
-    
-    #make dataframe to h2oframe 
-    df = h2o.H2OFrame(dataset_x)
-    
-    #select models
-    models  = pd.read_sql("SELECT * FROM model;", engine)
-    
-    model_names = models['model_name']
-    
-    #model_name
-    col_list=[]
-    
-    #pred values
-    pred_list=[]
-    
-    #append predict value
-    for model_name in model_names:
-        #open model
-        model = h2o.load_model(model_path+model_name)
+    return final_df
+
+# 몇일전 데이터로 예측하는지 세팅
+
+def make_model(days_a, data, file_nm):
+
+    for days in range(2,days_a):
+        model_name = "M"+file_nm+str(days-1)      
+        print(model_name)
+
+        #==============================================================================
+        # dataset
+        #==============================================================================
+
+        train = make_pred_df(data, days)
+        #test  = make_pred_df(test_2015, days)
+
+        x=train.drop(['target'],axis=1).columns
+        y="target"    
         
-        h2o_pred = model.predict(df)
-        h2o_pred = h2o.as_list(h2o_pred)
-        h2o_pred = h2o_pred.predict
-        pred_a = str(h2o_pred[0]).replace('0','N').replace('1','Y')
+        #train set
+        '''data_  = data_d.drop(['target'], axis=1)
+        X_train = data_.ix[:,0:len(data_.columns)].as_matrix()
+        y_train = data_d.target
+        
+        #import xgboost as xgb
+        clf1 = RandomForestClassifier()
+        clf1.fit(X_train,y_train)
+        
+        #now you can save it to a file        
+        with open(model_name, 'wb') as f:
+            pickle.dump(clf1, f)
+    
+        '''
+        # Random Forest
+        model = H2ORandomForestEstimator(ntrees=100,max_depth=10)
+        model.train(x=x,y=y,training_frame=train)
+        
+        model_nm = h2o.save_model(model, path = save_path, force=True)
+        os.rename(model_nm, model_name)
+        
 
-  
-        col_list.append(model_name)
-        pred_list.append(pred_a)
+
+jil_grp_dict ={"급성.상기도.감염":"0101"
+                ,"인플루엔자.및.폐렴":"0102"
+                ,"기타.급성.하기도.감염":"0103"
+                ,"상기도의.기타.질환":"0104"
+                ,"만성.하기도.질환":"0105"
+                ,"외부요인에.의한.폐질환":"0106"
+                ,"주로.간질에.영향을.주는.기타.호흡기.질환":"0107"
+                ,"하기도의.화농성.및.괴사성.병태":"0108"
+                ,"흉막의.기타.질환":"0109"
+                ,"호흡기계의.기타.질환":"0110"
+                ,"영유아":"01"
+                ,"어린이":"02"
+                ,"청소년":"03"
+                ,"성인":"04"
+                ,"장년층":"05"
+                ,"_":""
+                ,"JGINDEX":""}
+
+def make_rename(file):
+    print("old::"+file)
+    for dic in jil_grp_dict:
+        #print(dic)
+        file = file.replace(dic,jil_grp_dict[dic])
+    print("new::"+file)
+    return file
+
+
+
+file = "C:\\Users\\han\\Google 드라이브\\17년도1학기_빅데이터MBA플젝\\분석자료_소스코드 및 캡처본\\분석_호준\\dataset_x\\dataset_x(all).csv"
+dataset_x = pd.read_csv(file, header=0, encoding='cp949')
+
+files = glob.glob("C:\\Users\\han\\Google 드라이브\\17년도1학기_빅데이터MBA플젝\\분석자료_소스코드 및 캡처본\\분석_호준\\target_y"+ "\\*.csv")
+
+
+save_path = 'D:\\국민대학원\\프로젝트\\모델만들기\\model2'
+os.chdir(save_path)
+
+
+# turn on H2O
+t= h2o.init()
+h2o.ls()
+
+
+
+#1일~7일 예측모델생성
+days_a = 9
+for file in files:
     
-    #shutdown h2o
-    h2o.cluster().shutdown()
-    #make pred dataframe        
-    final_df  = pd.DataFrame(list(zip (col_list,pred_list)))
+    #target_y load
+    target = pd.read_csv(file, header=0, encoding='cp949')
+    target.columns = ["date","target"]
+
+    #dataset_x merge
+    df = pd.merge(dataset_x, target, how='inner')
+
+    del df['date']
+    del df['city']
     
-    #pred values
-    final_df = final_df.T[1:]
+    #old_name
+    file_nm = os.path.basename(file)
     
-    #pred columns name setting 
-    final_df.columns = col_list
-     
-    final_df['date'] = today
-    print('predict save..')
-    print(final_df)
-    final_df.to_sql(name='pred', con=engine, if_exists = 'append', index=False, chunksize=1000000)
+    #new_name
+    name = make_rename(file_nm)
+
+    file_nm = name.replace(".csv","")
+    
+    #모델생성
+    make_model(days_a, df, file_nm)
+    
+    
