@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import h2o
-
+import time
 import glob
 import os
 from sqlalchemy import create_engine
@@ -98,45 +98,49 @@ def make_rename(file):
 
 
 
+def start():
+    #1일~7일 예측모델생성
+    days_a = 9
+    for file in files:
+        
+        #target_y load
+        target = pd.read_csv(file, header=0, encoding='cp949')
+        target.columns = ["date","target"]
+    
+        #dataset_x merge
+        df = pd.merge(dataset_x, target, how='inner')
+    
+        del df['date']
+        del df['city']
+        
+        #old_name
+        file_nm = os.path.basename(file)
+        
+        #new_name
+        name = make_rename(file_nm)
+    
+        file_nm = name.replace(".csv","")
+        
+        #모델생성
+        make_model(days_a, df, file_nm)
+        
+
 file = "C:\\Users\\han\\Google 드라이브\\17년도1학기_빅데이터MBA플젝\\분석자료_소스코드 및 캡처본\\분석_호준\\dataset_x\\dataset_x(all).csv"
 dataset_x = pd.read_csv(file, header=0, encoding='cp949')
 
 files = glob.glob("C:\\Users\\han\\Google 드라이브\\17년도1학기_빅데이터MBA플젝\\분석자료_소스코드 및 캡처본\\분석_호준\\target_y"+ "\\*.csv")
 
 
-save_path = 'D:\\국민대학원\\프로젝트\\모델만들기\\model2'
+save_path = 'D:\\국민대학원\\프로젝트\\모델만들기\\model3'
 os.chdir(save_path)
 
 
 # turn on H2O
-t= h2o.init()
+h2o.init()
 h2o.ls()
 
+time.sleep(5)
+start()
 
-
-#1일~7일 예측모델생성
-days_a = 9
-for file in files:
-    
-    #target_y load
-    target = pd.read_csv(file, header=0, encoding='cp949')
-    target.columns = ["date","target"]
-
-    #dataset_x merge
-    df = pd.merge(dataset_x, target, how='inner')
-
-    del df['date']
-    del df['city']
-    
-    #old_name
-    file_nm = os.path.basename(file)
-    
-    #new_name
-    name = make_rename(file_nm)
-
-    file_nm = name.replace(".csv","")
-    
-    #모델생성
-    make_model(days_a, df, file_nm)
-    
+        
     
