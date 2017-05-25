@@ -83,3 +83,19 @@ freeze 파이썬 패키지 설치목록 생성
 
 pip freeze > requirements.txt 생성
 $ pip install -r requirements.txt 설치 
+
+
+
+  httpd 재시작
+
+#service httpd start
+
+
+  service 명령어로도 가능하다. 
+
+#service mysqld start
+
+#service mysqld stop
+
+#service mysqld restart
+
