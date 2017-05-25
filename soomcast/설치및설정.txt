@@ -1,0 +1,85 @@
+centos에 
+
+python3 설치
+$ sudo yum install epel-release
+$ sudo yum install python34
+$ curl -O https://bootstrap.pypa.io/get-pip.py
+$ sudo /usr/bin/python3.4 get-pip.py
+
+mysql
+$ yum install mysql
+$ yum install mysql-server
+$ service mysqld start
+
+anaconda
+cd /opt
+wget http://repo.continuum.io/archive/Anaconda3-4.3.1-Linux-x86_64.sh
+
+
+phantomjs
+
+--yum install fontconfig freetype freetype-devel fontconfig-devel libstdc++
+wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-linux-x86_64.tar.bz2
+tar -xjvf ~/downloads/phantomjs-1.9.8-linux-x86_64.tar.bz2  /opt/phantomjs/
+
+path = .,,/bin/phantom/
+
+path설정
+export PATH=$PATH:  +...
+
+권한설정
+chmod 755 -R 폴더path
+
+scipy
+pip install numpy scipy
+
+
+h2o
+#pip install h2o
+pip install colorama requests tabulate future --upgrade
+
+pip install tabulate
+pip install http://h2o-release.s3.amazonaws.com/h2o/rel-turing/10/Python/h2o-3.10.0.10-py2.py3-none-any.whl
+
+git 리모트 저장소 연결
+git remote -v (연결 git 확인)
+
+git remote add soomcast https://github.com/hhjun321/soomcast (github 연결)
+
+git fetch soomcast (fetch 하고)
+git pull soomcast (fetch 하고 pull 해야 자동 merge 작업으로 풀어줌)
+
+
+git 특정 direcory pull방법
+
+1. cd into the top of your repo copy
+2. git fetch
+3. git checkout HEAD path/to/your/dir/or/file
+
+
+crontab 설정
+
+crontab -l (내용확인)
+crontab -e (수정)
+service crond restart (cron 재실행)
+예1) 0,30 * * * * /user/ghi/test.sh
+
+     : 매시간 0분, 30분에 test.sh를 실행 시킨다. (1시간에 2번 실행된다.)
+
+예2) 30 * * * * /user/ghi/test.sh
+
+     : 매시간 30분에 test.sh를 실행 시킨다. (1시간에 1번 실행된다.)
+
+예3) 30 13 * * 6 /user/ghi/test.sh
+
+     : 매주 토요일 오후 1시 30분에 test.sh를 실행 시킨다
+
+예4) 30 0 1 1,4,7,10 * /user/ghi/test.sh
+
+     : 매년 1,4,7,10월의 1일 0시 30분에 test.sh를 실행 시킨다
+       (분기별 마감 등의 작업에 사용될 수 있다)
+
+freeze 파이썬 패키지 설치목록 생성
+
+pip freeze > requirements.txt 생성
+$ pip install -r requirements.txt 설치 
