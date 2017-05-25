@@ -2,7 +2,8 @@ from sqlalchemy import create_engine
 from datetime import timedelta, date
 
 from crawling import degi_api, gisang_api
-from dataset import dataset_x, predict
+from dataset import dataset_x
+#from dataset import predict
 #from dataset import predict2
 
 #today = date(2017, 5, 19)+timedelta(days=-1)
@@ -21,5 +22,5 @@ model_path = '../model'
 degi_api.start(engine, today)
 gisang_api.start(engine, today)
 dataset_x.start(engine, today, before_4day)
-predict.start(engine, today, model_path)
+#predict.start(engine, today, model_path)
 #predict2.start(engine, today, model_path)

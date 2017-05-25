@@ -4,6 +4,7 @@ import os
 import pickle
  
 def start(engine, today, model_path):
+    print('predict start')
     
     #set model path
     os.chdir(model_path)

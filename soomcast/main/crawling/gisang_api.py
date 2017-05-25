@@ -33,6 +33,8 @@ def rebuild_frame(df):
     return df
 
 def start(engine, today):
+    print('gisang start')
+    
     today = today.strftime("%Y%m%d")
     
     driver = webdriver.PhantomJS(service_args=['--ignore-ssl-errors=true', '--ssl-protocol=any'])        
@@ -94,7 +96,7 @@ def start(engine, today):
     df = pd.DataFrame(val_list)
     
     #select city_code
-    df_code  = pd.read_sql("SELECT * FROM GISANG_CITY;", engine)
+    df_code  = pd.read_sql("select * from gisang_city;", engine)
     
     #change columns name
     cols = [ 'no','date'

@@ -26,7 +26,6 @@ def get_degi_data(itemCd, period):
     
     returndata = dict()
     totalCount = jsondata['totalCount']
-    print(totalCount)
     
     #json to dataframe
     for i in range(0, totalCount):
@@ -59,6 +58,7 @@ def get_degi_data(itemCd, period):
 
 
 def start(engine, today):
+    print('degi start')
         
     today = today.strftime("%Y-%m-%d")
     
