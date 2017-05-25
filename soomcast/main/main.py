@@ -6,15 +6,15 @@ from dataset import dataset_x
 #from dataset import predict
 #from dataset import predict2
 
-#today = date(2017, 5, 19)+timedelta(days=-1)
+#today = date(2017, 5, 24)+timedelta(days=-1)
 today = date.today()+timedelta(days=-1)
 
 # before 4days 
 before_4day = today+timedelta(days=-4)
 
 
-db_config = 'mysql+pymysql://root:soomcastmysql@soomcast.vitamiin.co.kr:3306/soomcast'
-engine = create_engine(db_config, echo=False)
+db_config = 'mysql+pymysql://root:soomcastmysql@soomcast.vitamiin.co.kr:3306/soomcast?charset=utf8'
+engine = create_engine(db_config, echo=False, encoding = 'utf-8')
 
 model_path = '../model'
 #model_path = '../model2/'
