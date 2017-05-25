@@ -56,6 +56,12 @@ git 특정 direcory pull방법
 2. git fetch
 3. git checkout HEAD path/to/your/dir/or/file
 
+git push 설정
+git commit -m 'message' -- my-dir (특정폴더)
+git push origin master
+(non fast forward 애러시 //)
+git push origin +master
+
 
 crontab 설정
 

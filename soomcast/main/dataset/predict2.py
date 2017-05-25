@@ -1,6 +1,10 @@
 import pandas as pd
 import os
 import h2o
+from h2o.estimators.glm import H2OGeneralizedLinearEstimator
+from h2o.estimators.gbm import H2OGradientBoostingEstimator
+from h2o.estimators.deeplearning import H2ODeepLearningEstimator
+from h2o.estimators.random_forest import H2ORandomForestEstimator
 
 def turn_on():
     # turn on H2O
