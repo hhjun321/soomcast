@@ -15,7 +15,8 @@ def sleep_medium():
 def start(engine, today):
     print('china_degi start')
     
-    today = today.strftime("%Y%m%d")
+    today = today.strftime("%Y-%m-%d")
+    month_t = today.replace('-','')[0:6]
     
     #driver = webdriver.PhantomJS(service_args=['--ignore-ssl-errors=true', '--ssl-protocol=any'])        
     driver = webdriver.Firefox()
@@ -56,7 +57,7 @@ def start(engine, today):
                 '深圳']
 
 
-    base = "https://www.aqistudy.cn/historydata/daydata.php?month=201706&city="
+    base = "https://www.aqistudy.cn/historydata/daydata.php?month="+month_t+"&city="
 
     for city in city_list:
         print(city)
@@ -75,6 +76,7 @@ def start(engine, today):
         header = ['date','aqi','status','PM2.5','PM10','SO2','CO','NO2','O3','rank','city']
         df.columns = header
         df = df[['date','aqi','PM2.5','PM10','SO2','CO','NO2','O3','rank','city']]
+        df = df[df['date'] == today]
         print('save')
     
         #gs = goslate.Goslate()
