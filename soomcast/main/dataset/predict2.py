@@ -35,7 +35,7 @@ def start(engine, today, model_path):
     df = h2o.H2OFrame(dataset_x)
     
     #select models
-    model_names = glob.glob(model_path+"\\*")
+    model_names = glob.glob(model_path+"/*")
     
     #model_name
     col_list=[]
