@@ -55,6 +55,40 @@ def start(engine, today):
                 '昆明',
                 '南宁',
                 '深圳']
+                
+    city_eng_list = [
+                'Beijing'
+                ,'Shanghai'
+                ,'Tianjin'
+                ,'Chongqing'
+                ,'Hangzhou'
+                ,'Harbin'
+                ,'Changchun'
+                ,'Shenyang'
+                ,'Shijiazhuang'
+                ,'Taiyuan'
+                ,'Xian'
+                ,'Jinan'
+                ,'Urumqi'
+                ,'Lhasa'
+                ,'Xining'
+                ,'Lanzhou'
+                ,'Yinchuan'
+                ,'Zhengzhou'
+                ,'Nanjing'
+                ,'Wuhan'
+                ,'Hefei'
+                ,'Fuzhou'
+                ,'Nanchang'
+                ,'Changsha'
+                ,'Guiyang'
+                ,'Chengdu'
+                ,'Guangzhou'
+                ,'Kunming'
+                ,'Nanning'
+                ,'Shenzhen']
+                
+    dic = {k: v for k, v in zip(city_list, city_eng_list)}
 
 
     base = "https://www.aqistudy.cn/historydata/daydata.php?month="+month_t+"&city="
@@ -71,7 +105,7 @@ def start(engine, today):
             t = [t.get_text() for t in values[n]]
             val_list.append(t)
         df = pd.DataFrame(val_list)
-        df['city'] = city
+        df['city'] = dic[city]
     
         header = ['date','aqi','status','PM2.5','PM10','SO2','CO','NO2','O3','rank','city']
         df.columns = header
