@@ -5,7 +5,7 @@ colorama==0.3.9
 future==0.16.0
 h2o==3.10.0.10
 lxml==3.7.3
-numpy==1.12.1
+numpy==1.21.0
 packaging==16.8
 pandas==0.20.1
 PyMySQL==0.7.11
